@@ -1,0 +1,73 @@
+from bs4 import BeautifulSoup
+import requests
+from datetime import datetime
+
+print("Here are the upcoming CS2 Pro matches:")
+
+
+url = "https://liquipedia.net/counterstrike/Liquipedia:Matches"
+
+# Updated HTML content
+response = requests.get(url)
+html_content = response.text
+
+# Parse the HTML content
+soup = BeautifulSoup(html_content, 'html.parser')
+# Find the specific div with data-toggle-area-content="2"
+div_content = soup.find('div', {'data-toggle-area-content': '2'})
+
+# If the div is found, proceed to extract information
+if div_content:
+    # Find all tables with the specified class within the div
+    tables = div_content.find_all('table', class_='wikitable wikitable-striped infobox_matches_content')
+
+    # Iterate through each table
+    for table in tables:
+        # Find all rows in the table
+        rows = table.find_all('tr')
+        # Iterate through each row
+        # Extract data from each table row (assuming there are multiple rows)
+        for row in table.find_all('tr'):
+            # Extract team names from first row cells with 'team-left' and 'team-right' classes
+            if len(row.find_all('td', class_='team-left')) > 0 and len(row.find_all('td', class_='team-right')) > 0:
+                team_left_cell = row.find('td', class_='team-left')
+                team_right_cell = row.find('td', class_='team-right')
+                
+                # Extract all text content within the cell (may include extra spaces or newlines)
+                team_left_name = team_left_cell.get_text(strip=True)  # Improved line
+                team_right_name = team_right_cell.get_text(strip=True)  # Improved line
+                
+                if team_left_name == "TBD" or team_right_name == "TBD":
+                    continue
+                
+                # Print the extracted team names
+                print(f"Match: {team_left_name} vs. {team_right_name}")
+                            
+            # Extract match details from the second row (assuming it has 'match-filler' class)
+            if len(row.find_all('td', class_='match-filler')) > 0:
+                match_details_cell = row.find('td', class_='match-filler')
+                
+                # Extract the ongoing match status (assuming it's within 'timer-object-countdown-live' class)
+                match_status = match_details_cell.find('span', class_='timer-object-countdown-live')
+                if match_status:
+                    print(f"Match Status: {match_status.text.strip()}")
+                
+                # Extract the league name from the anchor tag within 'league-icon-small-image' class
+                league_details = match_details_cell.find('a', class_=None)  # Find anchor tag without a class
+                if league_details:
+                    print(f"League: {league_details.text.strip()}")
+
+                # Find the span element with class "timer-object-countdown-only"
+                countdown_span = soup.find('span', class_='timer-object-countdown-only')
+
+                # Extract the value of the "data-timestamp" attribute
+                if countdown_span:
+                    timestamp = countdown_span['data-timestamp']
+                    # Convert timestamp to human-readable date and time
+                    dt_object = datetime.fromtimestamp(int(timestamp))
+                    print("Date and Time:", dt_object)
+                else:
+                    print("Timestamp not found.")
+                                
+                # You can extract other details from the 'match-details_cell' element based on your needs
+                print("---")

@@ -1,1 +1,1 @@
-This program uses Python with beautifulsoup3 to scrape CS2 pro matches
+This program uses Python with beautifulsoup3 to scrape upcoming CS2 pro matches. I would eventually like to make this into a discord bot that posts once a day with the games for that specific day. 
