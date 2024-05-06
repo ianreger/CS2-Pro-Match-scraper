@@ -1,9 +1,15 @@
 from bs4 import BeautifulSoup
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
+
+# Get dates
+today = datetime.now()
+
+# Get tomorrow's date by adding one day to today's date
+tomorrow = today + timedelta(days=1)
+
 
 print("Here are the upcoming CS2 Pro matches:")
-
 
 url = "https://liquipedia.net/counterstrike/Liquipedia:Matches"
 
@@ -36,36 +42,34 @@ if div_content:
                 # Extract all text content within the cell (may include extra spaces or newlines)
                 team_left_name = team_left_cell.get_text(strip=True)  # Improved line
                 team_right_name = team_right_cell.get_text(strip=True)  # Improved line
-                
-                if team_left_name == "TBD" or team_right_name == "TBD":
-                    continue
-                
-                # Print the extracted team names
-                print(f"Match: {team_left_name} vs. {team_right_name}")
+             
                             
             # Extract match details from the second row (assuming it has 'match-filler' class)
             if len(row.find_all('td', class_='match-filler')) > 0:
                 match_details_cell = row.find('td', class_='match-filler')
-                
+
+
                 # Extract the ongoing match status (assuming it's within 'timer-object-countdown-live' class)
                 match_status = match_details_cell.find('span', class_='timer-object-countdown-live')
-                if match_status:
-                    print(f"Match Status: {match_status.text.strip()}")
+                
                 
                 # Extract the league name from the anchor tag within 'league-icon-small-image' class
                 league_details = match_details_cell.find('a', class_=None)  # Find anchor tag without a class
-                if league_details:
-                    print(f"League: {league_details.text.strip()}")
+                
 
-                # Find the span element with class "timer-object-countdown-only"
-                countdown_span = soup.find('span', class_='timer-object-countdown-only')
-
-                # Extract the value of the "data-timestamp" attribute
+                # Find countdown element and extract date INSIDE the loop for each row
+                countdown_span = row.find('span', class_='timer-object-countdown-only')
                 if countdown_span:
                     timestamp = countdown_span['data-timestamp']
-                    # Convert timestamp to human-readable date and time
                     dt_object = datetime.fromtimestamp(int(timestamp))
-                    print("Date and Time:", dt_object)
+                    if today <= dt_object <= tomorrow:
+                        print(f"Match: {team_left_name} vs. {team_right_name}")
+                        league_details = match_details_cell.find('a', class_=None)  # Find anchor tag without a class
+                        if league_details:
+                            print(f"League: {league_details.text.strip()}")
+                        print(f"Date and Time: {dt_object}")
+                    else: 
+                        exit()
                 else:
                     print("Timestamp not found.")
                                 
