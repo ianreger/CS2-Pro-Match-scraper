@@ -67,7 +67,7 @@ if div_content:
                         league_details = match_details_cell.find('a', class_=None)  # Find anchor tag without a class
                         if league_details:
                             print(f"League: {league_details.text.strip()}")
-                        print(f"Date and Time: {dt_object.strftime('%I:%M:%S %p')}")
+                        print(f"Date and Time: {dt_object.strftime('%A, %m/%d/%Y, %I:%M:%S %p')}")
                     else: 
                         break
                 else:
