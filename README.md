@@ -1,4 +1,4 @@
-This program uses Python with beautifulsoup3 to scrape upcoming CS2 pro matches from [Liquipedia](https://liquipedia.net/counterstrike/Liquipedia:Matches. I would eventually like to make this into a discord bot that posts once a day with the games for that specific day. 
+This program uses Python with beautifulsoup3 to scrape upcoming CS2 pro matches from [Liquipedia](https://liquipedia.net/counterstrike/Liquipedia:Matches). I would eventually like to make this into a discord bot that posts once a day with the games for that specific day. 
 
 
 Before running please ensure to make sure you have the proper pip packages by running:
