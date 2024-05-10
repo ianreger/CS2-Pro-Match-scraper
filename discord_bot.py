@@ -21,7 +21,7 @@ async def execute_program(program):
         output = ""
     return output, error
 
-@bot.tree.command(name="getgames")
+@bot.tree.command(name="upcominggames")
 async def get_matches(interaction: discord.Interaction):
   # Execute the program and get output/error
   output, error = await execute_program(program_path)
@@ -31,7 +31,7 @@ async def get_matches(interaction: discord.Interaction):
     await interaction.response.send_message(error, ephemeral=True)
   else:
     # Optionally format the output (e.g., using code blocks)
-    formatted_output = f"`\n{output}\n`"
+    formatted_output = f'''{output}'''
     await interaction.response.send_message(formatted_output, ephemeral=False)
 
 

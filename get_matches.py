@@ -64,14 +64,18 @@ if div_content:
                     timestamp = countdown_span['data-timestamp']
                     dt_object = datetime.fromtimestamp(int(timestamp))
                     if today <= dt_object <= tomorrow:
+                        # Teams
                         print(f"Match: {team_left_name} vs. {team_right_name}")
                         league_details = match_details_cell.find('a', class_=None)  # Find anchor tag without a class
+                        
+                        # League
                         if league_details:
                             print(f"League: {league_details.text.strip()}")
-                        print(f"Date and Time (EST): {dt_object.strftime('%A, %m/%d/%Y, %I:%M %p')}")
-                        # Get CEST 
-                        dt_object_cest = dt_object.astimezone(timezone('CET'))
-                        print(f"Date and Time (CET): {dt_object_cest.strftime('%A, %m/%d/%Y, %I:%M %p')}")
+                        
+                        # Time
+                        print(f"Date and Time: <t:{countdown_span['data-timestamp']}>")
+                        
+                        # Stream
                         # Check if Twitch stream link exists in data-stream-twitch attribute
                         twitch_stream_link = None
                         if countdown_span.has_attr('data-stream-twitch'):
@@ -83,7 +87,7 @@ if div_content:
                                 twitch_stream_link = twitch_stream_link_tag['href']
 
                         if twitch_stream_link:
-                            print(f"Twitch Stream Link: https://liquipedia.net/counterstrike/Special:Stream/twitch/{twitch_stream_link}")
+                            print(f"Twitch Stream Link: <a href='https://liquipedia.net/counterstrike/Special:Stream/twitch/{twitch_stream_link}'>{twitch_stream_link}</a>")
                         else:
                             print("Twitch stream link not found for this match.")
                     else: 
