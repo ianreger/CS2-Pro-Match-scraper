@@ -9,4 +9,5 @@ pip install requests
 
 pip install beautifulsoup4
 
-![image](https://github.com/ianreger/CS2-Pro-Match-scraper/assets/22198832/6ffc9e03-10c7-43dd-9d60-095bcc7d6358)
+![image](https://github.com/ianreger/CS2-Pro-Match-scraper/assets/22198832/a488ff2e-ce75-45f1-90d6-cb3723e2ea2f)
+
