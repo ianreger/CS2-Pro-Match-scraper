@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from datetime import datetime, timedelta
 from pytz import timezone
-
+import re
 # Get dates
 today = datetime.now()
 
@@ -10,7 +10,7 @@ today = datetime.now()
 tomorrow = today + timedelta(days=1)
 
 
-print("Here are the upcoming CS2 Pro matches:")
+print("Here are the upcoming CS2 Pro matches:\n")
 
 url = "https://liquipedia.net/counterstrike/Liquipedia:Matches"
 
@@ -72,12 +72,24 @@ if div_content:
                         # Get CEST 
                         dt_object_cest = dt_object.astimezone(timezone('CET'))
                         print(f"Date and Time (CET): {dt_object_cest.strftime('%A, %m/%d/%Y, %I:%M %p')}")
-                        
-                        
+                        # Check if Twitch stream link exists in data-stream-twitch attribute
+                        twitch_stream_link = None
+                        if countdown_span.has_attr('data-stream-twitch'):
+                            twitch_stream_link = countdown_span['data-stream-twitch']
+                        else:
+                            # If not found in data-stream-twitch attribute, try to extract from the href of the <a> tag
+                            twitch_stream_link_tag = match_details_cell.find('a', href=re.compile(r"/counterstrike/Special:Stream/twitch/"))
+                            if twitch_stream_link_tag:
+                                twitch_stream_link = twitch_stream_link_tag['href']
+
+                        if twitch_stream_link:
+                            print(f"Twitch Stream Link: https://liquipedia.net/counterstrike/Special:Stream/twitch/{twitch_stream_link}")
+                        else:
+                            print("Twitch stream link not found for this match.")
                     else: 
                         break
                 else:
                     print("Timestamp not found.")
                                 
                 # You can extract other details from the 'match-details_cell' element based on your needs
-                print("---")
+                print("---\n")
