@@ -87,7 +87,7 @@ if div_content:
                                 twitch_stream_link = twitch_stream_link_tag['href']
 
                         if twitch_stream_link:
-                            print(f"Twitch Stream Link: <a href='https://liquipedia.net/counterstrike/Special:Stream/twitch/{twitch_stream_link}'>{twitch_stream_link}</a>")
+                            print(f"[Click to watch](https://liquipedia.net/counterstrike/Special:Stream/twitch/{twitch_stream_link})")
                         else:
                             print("Twitch stream link not found for this match.")
                     else: 
