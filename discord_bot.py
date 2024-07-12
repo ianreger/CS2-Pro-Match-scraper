@@ -22,7 +22,7 @@ async def execute_program(program):
         output = ""
     return output, error
 
-@bot.tree.command(name="upcominggames")
+@bot.tree.command(name="getgames")
 async def get_matches(interaction: discord.Interaction):
   # Execute the program and get output/error
   output, error = await execute_program(program_path)
@@ -31,9 +31,13 @@ async def get_matches(interaction: discord.Interaction):
   if error:
     await interaction.response.send_message(error, ephemeral=True)
   else:
-    # Optionally format the output (e.g., using code blocks)
-    formatted_output = f'''{output}'''
-    await interaction.response.send_message(formatted_output, ephemeral=False)
+    # Split the output into chunks of less than 2000 characters
+    chunk_size = 2000
+    chunks = [output[i:i+chunk_size] for i in range(0, len(output), chunk_size)]
+
+    # Send each chunk as a separate message
+    for chunk in chunks:
+      await interaction.response.send_message(chunk, ephemeral=False)
 
 
 @bot.event
